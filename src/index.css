@@ -1,0 +1,230 @@
+/* General Styles */
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: #0d1117;
+  color: #fff;
+}
+
+/* App Container */
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Header */
+header {
+  background: #111827;
+  padding: 1rem 2rem;
+  text-align: center;
+  border-bottom: 2px solid #1f2937;
+}
+
+header h1 {
+  font-size: 1.8rem;
+  color: #00ffae;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+/* Main Layout */
+main {
+  display: grid;
+  grid-template-columns: 250px 1fr 250px;
+  gap: 20px;
+  padding: 20px;
+  flex: 1;
+}
+
+/* Left Sidebar */
+.left-panel,
+.sidebar {
+  background: #1a1a1a;
+  padding: 1rem;
+  border-radius: 10px;
+  animation: fadeIn 0.5s ease-in-out;
+  transition: width 0.3s ease, opacity 0.3s ease;
+  overflow: hidden;
+}
+
+.sidebar.collapsed {
+  width: 40px;
+  padding: 0.5rem;
+}
+
+/* Sidebar Toggle */
+.sidebar-toggle {
+  position: absolute;
+  top: 10px;
+  right: -15px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #00ffae;
+  color: #000;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.sidebar-toggle:hover {
+  background: #00c78c;
+}
+
+.sidebar-toggle svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Center Panel */
+.center-panel {
+  background: #1f1f1f;
+  padding: 1rem;
+  border-radius: 10px;
+}
+
+/* Stock Input */
+.symbol-input,
+.stock-input {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.symbol-input input,
+.stock-input input {
+  flex: 1;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  outline: none;
+}
+
+.symbol-input button,
+.stock-input button {
+  padding: 0.5rem 1rem;
+  background: #00ffae;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  color: #000;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.symbol-input button:hover,
+.stock-input button:hover {
+  background: #00c78c;
+}
+
+/* Prediction Box */
+.prediction-box,
+.prediction-card {
+  background: #1f2937;
+  padding: 10px;
+  border-radius: 10px;
+  margin-top: 10px;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.predicted-price,
+.prediction-box .highlight {
+  color: #00ffae;
+  font-weight: bold;
+}
+
+/* Right Panel */
+.right-panel {
+  background: #1a1a1a;
+  padding: 1rem;
+  border-radius: 10px;
+}
+
+/* Footer */
+.app-footer {
+  text-align: center;
+  padding: 1rem;
+  background: #121212;
+  font-size: 0.9rem;
+  border-top: 1px solid #333;
+  color: #aaa;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.portfolio-input {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.portfolio-input input {
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  flex: 1;
+}
+
+.portfolio-input button {
+  background: #00ffae;
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-weight: bold;
+}
+/* Header Fix */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: #0d1117;
+  border-bottom: 1px solid #333;
+  color: #00ffae;
+  font-weight: bold;
+}
+
+/* Ticker Bar */
+.ticker-container {
+  flex: 1;
+  margin-left: 2rem;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.ticker-text {
+  display: inline-block;
+  padding-left: 100%;
+  animation: ticker-scroll 20s linear infinite;
+}
+
+@keyframes ticker-scroll {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+/* Main Layout Fix */
+main {
+  display: grid;
+  grid-template-columns: 250px 1fr 250px;
+  gap: 1.5rem;
+  padding: 1.5rem;
+}
+
+.left-panel, .center-panel, .right-panel {
+  background: #1a1a1a;
+  padding: 1rem;
+  border-radius: 8px;
+}
