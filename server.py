@@ -2,12 +2,13 @@ from flask import Flask, jsonify, send_from_directory
 from flask_cors import CORS
 import yfinance as yf
 import os
+from ai_model import predict_next_price  # <-- Real AI prediction here
 
-app = Flask(__name__, static_folder="dist")
+app = Flask(__name__, static_folder="dist", static_url_path="")
 CORS(app)
 
 # -------------------------------
-# API to fetch stock historical data
+# API: Stock Historical Data
 # -------------------------------
 @app.route("/api/stock/<symbol>", methods=["GET"])
 def get_stock_data(symbol):
@@ -18,7 +19,6 @@ def get_stock_data(symbol):
         if hist.empty:
             return jsonify({"error": "No data found"}), 404
 
-        # Prepare data in Yahoo Finance style
         timestamps = [int(ts.timestamp()) for ts in hist.index]
         closes = hist["Close"].tolist()
 
@@ -27,9 +27,7 @@ def get_stock_data(symbol):
                 "result": [
                     {
                         "timestamp": timestamps,
-                        "indicators": {
-                            "quote": [{"close": closes}]
-                        },
+                        "indicators": {"quote": [{"close": closes}]},
                         "meta": {
                             "symbol": symbol,
                             "longName": stock.info.get("longName", symbol)
@@ -44,24 +42,15 @@ def get_stock_data(symbol):
 
 
 # -------------------------------
-# API to predict next stock price (basic AI simulation)
+# API: AI Stock Price Prediction
 # -------------------------------
 @app.route("/api/predict/<symbol>", methods=["GET"])
 def predict_stock(symbol):
     try:
-        stock = yf.Ticker(symbol)
-        hist = stock.history(period="1mo", interval="1d")
-
-        if hist.empty:
-            return jsonify({"error": "No data found"}), 404
-
-        last_price = hist["Close"].iloc[-1]
-        # Basic prediction: +2% simulation
-        predicted_price = round(last_price * 1.02, 2)
-
+        predicted_price = predict_next_price(symbol)
         return jsonify({
-            "symbol": symbol,
-            "predicted_price": predicted_price
+            "symbol": symbol.upper(),
+            "predicted_price": round(predicted_price, 2)
         })
     except Exception as e:
         return jsonify({"error": str(e)}), 500
