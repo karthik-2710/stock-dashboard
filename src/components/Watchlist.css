@@ -1,73 +1,149 @@
-.watchlist {
-  margin-top: 30px;
-  background: #1b1b1b;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+.watchlist-container {
+  background: #1a1a1a;
+  padding: 16px;
+  border-radius: 8px;
+  color: #f5f5f5;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
 }
 
 .watchlist-title {
-  font-size: 1.5rem;
-  color: #00ffc6;
-  margin-bottom: 15px;
-  text-align: center;
+  font-size: 1.3rem;
+  margin-bottom: 12px;
+  border-bottom: 2px solid #444;
+  padding-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #ffd700;
 }
 
 .add-stock {
   display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
+  gap: 8px;
+  margin-bottom: 12px;
 }
 
-.add-input {
-  flex: 1;
-  padding: 10px;
-  border-radius: 5px;
-  border: none;
+.input-symbol {
+  padding: 6px 8px;
+  border-radius: 4px;
+  border: 1px solid #555;
   background: #2a2a2a;
   color: #fff;
-  font-size: 1rem;
-  outline: none;
 }
 
-.add-btn {
-  background: #00bfa6;
-  color: #fff;
+.btn {
+  padding: 6px 10px;
   border: none;
-  padding: 10px 15px;
-  border-radius: 5px;
+  border-radius: 4px;
   cursor: pointer;
-  transition: 0.3s;
-}
-.add-btn:hover {
-  background: #009e8c;
 }
 
-.stock-list {
+.btn-add {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+.btn-add:hover {
+  background-color: #45a049;
+}
+
+.sort-section {
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.watchlist {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.stock-item {
+.watchlist-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #292929;
-  padding: 12px;
-  border-radius: 5px;
+  background: #2b2b2b;
   margin-bottom: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: 0.2s ease-in-out;
+}
+
+.watchlist-item:hover {
+  background: #353535;
+}
+
+.stock-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.stock-symbol {
+  font-weight: bold;
+  font-size: 1rem;
+  color: #fff;
+}
+
+.stock-name {
+  font-size: 0.8rem;
+  color: #aaa;
+}
+
+.stock-prices {
+  text-align: right;
+}
+
+.current-price {
+  color: #4caf50;
+  font-weight: bold;
 }
 
 .remove-btn {
-  background: #ff4b4b;
+  background: transparent;
   border: none;
-  padding: 5px 10px;
-  color: white;
-  border-radius: 5px;
+  font-size: 1rem;
+  color: #ff4c4c;
   cursor: pointer;
-  transition: 0.3s;
+  transition: 0.2s;
 }
+
 .remove-btn:hover {
-  background: #d93636;
+  color: #ff0000;
 }
+
+.empty-watchlist {
+  text-align: center;
+  font-style: italic;
+  color: #888;
+}
+.symbol-input {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  z-index: 10; /* Bring it to the front */
+  position: relative;
+}
+
+.symbol-input input {
+  flex: 1;
+  padding: 6px 8px;
+  border-radius: 4px;
+  border: 1px solid #444;
+  background: #1e1e1e;
+  color: #fff;
+}
+
+.symbol-input button {
+  padding: 6px 12px;
+  border-radius: 4px;
+  background: #3a3a3a;
+  color: white;
+  cursor: pointer;
+  z-index: 11; /* make sure button is above others */
+}
+
+.symbol-input button:hover {
+  background: #555;
+}
+
