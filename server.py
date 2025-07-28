@@ -2,13 +2,14 @@ from flask import Flask, jsonify, send_from_directory
 from flask_cors import CORS
 import yfinance as yf
 import os
-from ai_model import predict_next_price  # <-- Real AI prediction here
+
+from ai_model import predict_next_price, train_or_load_model
 
 app = Flask(__name__, static_folder="dist", static_url_path="")
 CORS(app)
 
 # -------------------------------
-# API: Stock Historical Data
+# API to fetch stock historical data
 # -------------------------------
 @app.route("/api/stock/<symbol>", methods=["GET"])
 def get_stock_data(symbol):
@@ -42,15 +43,29 @@ def get_stock_data(symbol):
 
 
 # -------------------------------
-# API: AI Stock Price Prediction
+# API to predict next stock price (AI model)
 # -------------------------------
 @app.route("/api/predict/<symbol>", methods=["GET"])
 def predict_stock(symbol):
     try:
         predicted_price = predict_next_price(symbol)
         return jsonify({
-            "symbol": symbol.upper(),
+            "symbol": symbol,
             "predicted_price": round(predicted_price, 2)
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+# -------------------------------
+# API to train or reload AI model for a stock
+# -------------------------------
+@app.route("/api/train/<symbol>", methods=["POST"])
+def train_stock_model(symbol):
+    try:
+        train_or_load_model(symbol)
+        return jsonify({
+            "message": f"Model for {symbol.upper()} trained and cached successfully."
         })
     except Exception as e:
         return jsonify({"error": str(e)}), 500
