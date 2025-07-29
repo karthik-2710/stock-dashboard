@@ -30,7 +30,7 @@ def get_stock_data(symbol):
                         "timestamp": timestamps,
                         "indicators": {"quote": [{"close": closes}]},
                         "meta": {
-                            "symbol": symbol,
+                            "symbol": symbol.upper(),
                             "longName": stock.info.get("longName", symbol)
                         }
                     }
@@ -48,9 +48,11 @@ def get_stock_data(symbol):
 @app.route("/api/predict/<symbol>", methods=["GET"])
 def predict_stock(symbol):
     try:
+        # Ensure model is trained or loaded
+        train_or_load_model(symbol)
         predicted_price = predict_next_price(symbol)
         return jsonify({
-            "symbol": symbol,
+            "symbol": symbol.upper(),
             "predicted_price": round(predicted_price, 2)
         })
     except Exception as e:
