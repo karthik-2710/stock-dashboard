@@ -2,11 +2,16 @@ from flask import Flask, jsonify, send_from_directory
 from flask_cors import CORS
 import yfinance as yf
 import os
-
+import requests
 from ai_model import predict_next_price, train_or_load_model
+from dotenv import load_dotenv
+load_dotenv()
+
 
 app = Flask(__name__, static_folder="dist", static_url_path="")
 CORS(app)
+
+MARKETAUX_API_KEY = os.getenv("MARKETAUX_API_KEY")
 
 # -------------------------------
 # API to fetch stock historical data
@@ -48,7 +53,6 @@ def get_stock_data(symbol):
 @app.route("/api/predict/<symbol>", methods=["GET"])
 def predict_stock(symbol):
     try:
-        # Ensure model is trained or loaded
         train_or_load_model(symbol)
         predicted_price = predict_next_price(symbol)
         return jsonify({
@@ -69,6 +73,46 @@ def train_stock_model(symbol):
         return jsonify({
             "message": f"Model for {symbol.upper()} trained and cached successfully."
         })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+# -------------------------------
+# API to fetch stock news from Marketaux
+# -------------------------------
+@app.route("/api/news/<symbol>", methods=["GET"])
+def get_stock_news(symbol):
+    try:
+        if not MARKETAUX_API_KEY:
+            return jsonify({"error": "Marketaux API key is not set."}), 500
+
+        response = requests.get(
+            "https://api.marketaux.com/v1/news/all",
+            params={
+                "symbols": symbol.upper(),
+                "language": "en",
+                "filter_entities": True,
+                "limit": 5,
+                "api_token": MARKETAUX_API_KEY
+
+            }
+        )
+
+        data = response.json()
+        if "data" not in data or not data["data"]:
+            return jsonify({"news": []}), 200
+
+        news_items = [
+            {
+                "title": article["title"],
+                "url": article["url"],
+                "source": article.get("source", {}).get("name", "Unknown"),
+                "published_at": article.get("published_at")
+            }
+            for article in data["data"]
+        ]
+
+        return jsonify({"news": news_items})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

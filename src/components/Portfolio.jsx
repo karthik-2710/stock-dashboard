@@ -31,28 +31,30 @@ function Portfolio({ portfolioData, setPortfolioData, tickerData }) {
 
   return (
     <div className="glass-card">
-      <h2>Portfolio</h2>
-      <div className="portfolio-input">
-        <input
-          type="text"
-          placeholder="Symbol (e.g. AAPL)"
-          value={newStock}
-          onChange={(e) => setNewStock(e.target.value)}
-        />
-        <input
-          type="number"
-          placeholder="Shares"
-          value={shares}
-          onChange={(e) => setShares(e.target.value)}
-        />
-        <button className="btn btn-add" onClick={addStock}>
-          + Add
-        </button>
+      <div className="portfolio-header">
+        <h2>Portfolio</h2>
+        <div className="portfolio-input">
+          <input
+            type="text"
+            placeholder="Symbol (e.g. AAPL)"
+            value={newStock}
+            onChange={(e) => setNewStock(e.target.value)}
+          />
+          <input
+            type="number"
+            placeholder="Shares"
+            value={shares}
+            onChange={(e) => setShares(e.target.value)}
+          />
+          <button className="btn btn-add" onClick={addStock}>
+            + Add
+          </button>
+        </div>
       </div>
 
-      {Object.entries(portfolioData).length > 0 ? (
-        <ul>
-          {Object.entries(portfolioData).map(([symbol, { shares }]) => (
+      <ul className="portfolio-list">
+        {Object.entries(portfolioData).length > 0 ? (
+          Object.entries(portfolioData).map(([symbol, { shares }]) => (
             <li key={symbol} className="stock-item">
               <span>
                 <strong>{symbol}</strong> - {shares} shares @ $
@@ -62,15 +64,16 @@ function Portfolio({ portfolioData, setPortfolioData, tickerData }) {
                 Remove
               </button>
             </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No stocks in portfolio.</p>
-      )}
+          ))
+        ) : (
+          <li>No stocks in portfolio.</li>
+        )}
+      </ul>
 
       <div className="prediction-box">
         <p>
-          <strong>Total Value:</strong> <span className="highlight">${totalValue.toFixed(2)}</span>
+          <strong>Total Value:</strong>{" "}
+          <span className="highlight">${totalValue.toFixed(2)}</span>
         </p>
       </div>
     </div>

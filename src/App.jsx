@@ -12,6 +12,11 @@ import Navbar from "./components/Navbar";
 import "./App.css";
 
 function App() {
+  const API_BASE =
+    window.location.hostname === "localhost"
+      ? "http://localhost:5000"
+      : window.location.origin;
+
   const [symbol, setSymbol] = useState("AAPL");
   const [stockData, setStockData] = useState([]);
   const [labels, setLabels] = useState([]);
@@ -21,25 +26,27 @@ function App() {
   const [watchlistData, setWatchlistData] = useState({});
   const [portfolioData, setPortfolioData] = useState({});
   const [tickerData, setTickerData] = useState({});
+  const [news, setNews] = useState([]);
 
   useEffect(() => {
     fetchStockData(symbol);
     fetchWatchlistData();
+    fetchNews(symbol);
   }, [symbol, watchlist]);
 
   const fetchStockData = async (symbol) => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/stock/${symbol}`);
+      const res = await axios.get(`${API_BASE}/api/stock/${symbol}`);
       const timestamps = res.data.chart.result[0].timestamp;
       const prices = res.data.chart.result[0].indicators.quote[0].close;
 
-      setLabels(timestamps.map((ts) => new Date(ts * 1000).toLocaleDateString()));
+      setLabels(
+        timestamps.map((ts) => new Date(ts * 1000).toLocaleDateString())
+      );
       setStockData(prices);
 
       try {
-        const predRes = await axios.get(
-          `http://localhost:5000/api/predict/${symbol}`
-        );
+        const predRes = await axios.get(`${API_BASE}/api/predict/${symbol}`);
         setPrediction(predRes.data.predicted_price);
       } catch (err) {
         console.error("Error fetching prediction:", err);
@@ -52,32 +59,41 @@ function App() {
 
   const fetchWatchlistData = async () => {
     const newData = {};
+    const newTickerData = {};
+
     for (let s of watchlist) {
       try {
-        const res = await axios.get(`http://localhost:5000/api/stock/${s}`);
+        const res = await axios.get(`${API_BASE}/api/stock/${s}`);
         const meta = res.data.chart.result[0].meta;
         const lastClose =
           res.data.chart.result[0].indicators.quote[0].close.slice(-1)[0];
+
         newData[s] = {
           name: meta.longName || s,
           price: lastClose,
         };
+
+        newTickerData[s] = lastClose;
       } catch (err) {
         console.error(`Error fetching ${s}:`, err);
       }
     }
+
     setWatchlistData(newData);
+    setTickerData(newTickerData); 
+  };
+
+  const fetchNews = async (symbol) => {
+    try {
+      const res = await axios.get(`${API_BASE}/api/news/${symbol}`);
+      setNews(res.data.articles);
+    } catch (err) {
+      console.error("Error fetching news:", err);
+    }
   };
 
   const Dashboard = () => (
     <div className="dashboard">
-      <header className="app-header">
-        <Navbar />
-        <div className="ticker-container">
-          <Ticker tickerData={tickerData} />
-        </div>
-      </header>
-
       <aside className="left-panel">
         <Watchlist
           watchlist={watchlist}
@@ -108,7 +124,7 @@ function App() {
           </div>
         )}
 
-        <NewsPanel symbol={symbol} />
+        <NewsPanel symbol={symbol} news={news} />
       </section>
 
       <aside className="right-panel">
@@ -127,14 +143,16 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Navbar /> {/* Always visible */}
+      <Navbar />
+      <div className="ticker-bar">
+        <Ticker tickerData={tickerData} />
+      </div>
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route
           path="/watchlist"
           element={
             <div className="page-container">
-              <h2>Watchlist</h2>
               <Watchlist
                 watchlist={watchlist}
                 setWatchlist={setWatchlist}
@@ -147,12 +165,12 @@ function App() {
           path="/portfolio"
           element={
             <div className="page-container">
-              <h2>Portfolio</h2>
               <Portfolio
                 portfolioData={portfolioData}
                 setPortfolioData={setPortfolioData}
                 tickerData={tickerData}
               />
+              <NewsPanel news={news} symbol={symbol} />
             </div>
           }
         />

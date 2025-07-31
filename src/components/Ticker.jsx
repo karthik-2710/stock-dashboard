@@ -1,3 +1,6 @@
+import React from 'react';
+import './Ticker.css'; // if you have any custom styles
+
 function Ticker({ tickerData }) {
   const defaultData = {
     AAPL: 211.18,
@@ -9,12 +12,14 @@ function Ticker({ tickerData }) {
   const data = tickerData && Object.keys(tickerData).length ? tickerData : defaultData;
 
   return (
-    <div className="ticker-text">
-      {Object.entries(data).map(([symbol, price]) => (
-        <span key={symbol} style={{ marginRight: "2rem" }}>
-          {symbol}: ${price}
-        </span>
-      ))}
+    <div className="ticker-container">
+      <div className="ticker-text">
+        {Object.entries(data).map(([symbol, price]) => (
+          <span key={symbol} style={{ marginRight: "2rem" }}>
+            {symbol}: ${price}
+          </span>
+        ))}
+      </div>
     </div>
   );
 }

@@ -29,36 +29,35 @@ function Watchlist({ watchlist = [], setWatchlist = () => {}, watchlistData = {}
 
   return (
     <div className="watchlist-container">
-      <h2 className="watchlist-title">Your Watchlist</h2>
+      <div className="watchlist-header">
+        <h2>Your Watchlist</h2>
 
-      {/* Add Stock Section */}
-      <div className="add-stock">
-        <input
-          type="text"
-          className="input-symbol"
-          placeholder="Enter stock symbol (e.g. AMZN)"
-          value={newStock}
-          onChange={(e) => setNewStock(e.target.value)}
-        />
-        <button className="btn btn-add" onClick={addStock}>
-          + Add
-        </button>
+        <div className="add-stock">
+          <input
+            type="text"
+            className="input-symbol"
+            placeholder="Enter stock symbol (e.g. AMZN)"
+            value={newStock}
+            onChange={(e) => setNewStock(e.target.value)}
+          />
+          <button className="btn btn-add" onClick={addStock}>
+            + Add
+          </button>
+        </div>
+
+        <div className="sort-section">
+          <label>Sort by:</label>
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="input-symbol"
+          >
+            <option value="name">Name</option>
+            <option value="price">Price</option>
+          </select>
+        </div>
       </div>
 
-      {/* Sorting Section */}
-      <div className="sort-section">
-        <label>Sort by:</label>
-        <select
-          value={sortBy}
-          onChange={(e) => setSortBy(e.target.value)}
-          className="input-symbol"
-        >
-          <option value="name">Name</option>
-          <option value="price">Price</option>
-        </select>
-      </div>
-
-      {/* Watchlist Items */}
       <ul className="watchlist">
         {sortedStocks.length === 0 ? (
           <li className="empty-watchlist">No stocks in your watchlist.</li>
