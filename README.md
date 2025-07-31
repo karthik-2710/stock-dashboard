@@ -69,5 +69,4 @@ Edit
 
 ---
 
-### **Want me to directly create this `README.md` file in your project folder?**  
-I’ll give you the exact command.
+
